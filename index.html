@@ -3,169 +3,107 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>xfy6238 · 个人主页</title>
-<meta name="description" content="xfy6238：iOS 老本行，在做 AI 应用。开源项目与技术文章。" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+<title>技术笔记 · xfy6238</title>
+<meta name="description" content="AI 应用开发、RAG、Agent 工程化的实践笔记与开源项目。" />
 <style>
   :root {
-    --paper: #f6f3ec;
-    --paper-warm: #efe9dc;
-    --ink: #1c1917;
-    --stone: #78716c;
-    --line: #e2dccd;
-    --seal: #b3372f;
-    --accent-soft: rgba(179, 55, 47, 0.08);
+    --bg: #ffffff;
+    --ink: #24292f;
+    --muted: #57606a;
+    --line: #d8dee4;
+    --accent: #0969da;
+    --code-bg: #f6f8fa;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
   body {
-    font-family: "Noto Sans SC", -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: var(--paper);
-    color: var(--ink);
-    line-height: 1.9;
-    min-height: 100vh;
-    background-image:
-      radial-gradient(1100px 500px at 85% -5%, rgba(179, 55, 47, 0.07), transparent 60%),
-      radial-gradient(900px 600px at -10% 30%, rgba(28, 25, 23, 0.05), transparent 55%);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.8;
   }
-  /* film grain */
-  body::after {
-    content: ""; position: fixed; inset: 0; pointer-events: none; opacity: 0.5; z-index: 50;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
-  }
-  .wrap { max-width: 880px; margin: 0 auto; padding: 0 28px 90px; position: relative; }
-  /* vertical side note */
-  .side-note {
-    position: absolute; right: -8px; top: 120px;
-    writing-mode: vertical-rl; letter-spacing: 0.55em;
-    font-size: 12px; color: var(--stone); user-select: none;
-  }
-  @media (max-width: 980px) { .side-note { display: none; } }
-  /* entrance */
-  @keyframes rise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
-  .rise { opacity: 0; animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
-  .d1 { animation-delay: 0.05s; } .d2 { animation-delay: 0.18s; } .d3 { animation-delay: 0.3s; }
-  .d4 { animation-delay: 0.42s; } .d5 { animation-delay: 0.54s; } .d6 { animation-delay: 0.66s; }
-  /* masthead */
-  header { padding: 96px 0 10px; display: flex; align-items: flex-start; gap: 26px; }
-  .seal {
-    flex: none; width: 74px; height: 74px; border-radius: 12px;
-    background: var(--seal); color: #fdf9f0;
-    font-family: "Noto Serif SC", serif; font-weight: 900; font-size: 30px;
-    display: grid; place-items: center; line-height: 1.1;
-    box-shadow: 0 14px 30px -12px rgba(179, 55, 47, 0.55);
-    transform: rotate(-4deg);
-  }
-  h1 { font-family: "Noto Serif SC", serif; font-weight: 900; font-size: clamp(38px, 6vw, 58px); letter-spacing: -0.01em; line-height: 1.15; }
-  h1 .dot { color: var(--seal); }
-  .sub { color: var(--stone); margin-top: 12px; font-size: 15.5px; max-width: 560px; }
-  .sub b { color: var(--ink); font-weight: 700; }
-  .rule { border: none; border-top: 1px solid var(--line); margin: 44px 0; position: relative; }
-  .rule::after { content: ""; position: absolute; left: 0; top: -3px; width: 72px; height: 5px; background: var(--seal); border-radius: 3px; }
-  h2 { font-family: "Noto Serif SC", serif; font-size: 21px; font-weight: 600; margin-bottom: 6px; display: flex; align-items: baseline; gap: 12px; }
-  h2 small { font-family: "Noto Sans SC", sans-serif; font-size: 11px; color: var(--stone); letter-spacing: 0.28em; font-weight: 500; }
-  .section-desc { color: var(--stone); font-size: 13.5px; margin-bottom: 22px; }
-  /* repo cards */
-  .repo {
-    display: grid; grid-template-columns: 64px 1fr auto; gap: 20px; align-items: center;
-    background: #fffdf8; border: 1px solid var(--line); border-radius: 18px;
-    padding: 22px 24px; margin-bottom: 14px; text-decoration: none; color: inherit;
-    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-    position: relative; overflow: hidden;
-  }
-  .repo::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--seal); opacity: 0; transition: opacity 0.22s ease; }
-  .repo:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -18px rgba(28, 25, 23, 0.25); border-color: #d8cfba; }
-  .repo:hover::before { opacity: 1; }
-  .idx { font-family: "Noto Serif SC", serif; font-weight: 900; font-size: 30px; color: var(--line); line-height: 1; }
-  .repo:hover .idx { color: var(--seal); }
-  .repo h3 { font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .repo p { color: var(--stone); font-size: 13.5px; margin-top: 6px; }
-  .tag { font-size: 11px; font-weight: 500; color: var(--seal); background: var(--accent-soft); border: 1px solid rgba(179, 55, 47, 0.25); border-radius: 999px; padding: 1px 10px; white-space: nowrap; }
-  .lang { font-size: 11px; color: var(--stone); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: nowrap; }
-  .arrow { font-size: 20px; color: var(--line); transition: transform 0.22s ease, color 0.22s ease; }
-  .repo:hover .arrow { transform: translateX(4px); color: var(--seal); }
-  /* articles */
-  .soon {
-    border: 1px dashed #cfc6b2; border-radius: 18px; padding: 26px 24px; color: var(--stone);
-    font-size: 14px; background: rgba(255, 253, 248, 0.5);
-  }
-  .soon li { list-style: none; padding: 7px 0 7px 26px; position: relative; }
-  .soon li::before { content: "○"; position: absolute; left: 2px; color: var(--seal); font-size: 12px; top: 11px; }
-  footer { margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--stone); font-size: 12.5px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  footer a { color: var(--seal); text-decoration: none; font-weight: 500; }
-  footer a:hover { text-decoration: underline; }
-  @media (max-width: 560px) {
-    header { padding-top: 64px; }
-    .seal { width: 58px; height: 58px; font-size: 24px; }
-    .repo { grid-template-columns: 1fr auto; }
-    .idx { display: none; }
-  }
-  @media (prefers-reduced-motion: reduce) { .rise { opacity: 1; animation: none; } }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px 80px; }
+  header.site { padding: 64px 0 8px; }
+  header.site h1 { font-size: 28px; font-weight: 650; letter-spacing: -0.01em; }
+  header.site p { color: var(--muted); font-size: 14.5px; margin-top: 8px; }
+  nav { margin-top: 20px; display: flex; gap: 4px; border-bottom: 1px solid var(--line); }
+  nav a { padding: 8px 14px; font-size: 14px; color: var(--ink); text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  nav a.active { border-bottom-color: var(--accent); font-weight: 600; }
+  nav a:hover { color: var(--accent); }
+  section { padding-top: 36px; }
+  h2 { font-size: 15px; font-weight: 650; margin-bottom: 16px; }
+  article.post { padding: 18px 0; border-bottom: 1px solid var(--line); }
+  article.post:last-child { border-bottom: none; }
+  article.post h3 { font-size: 18px; font-weight: 600; }
+  article.post h3 a { color: var(--accent); text-decoration: none; }
+  article.post h3 a:hover { text-decoration: underline; }
+  article.post .meta { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  article.post p { font-size: 14.5px; color: var(--muted); margin-top: 8px; }
+  .tag { display: inline-block; font-size: 12px; font-weight: 500; color: var(--accent); background: #ddf4ff; border-radius: 999px; padding: 0 10px; margin-right: 6px; line-height: 22px; }
+  ul.proj { list-style: none; }
+  ul.proj li { padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 14.5px; }
+  ul.proj li:last-child { border-bottom: none; }
+  ul.proj a { color: var(--accent); font-weight: 600; text-decoration: none; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; }
+  ul.proj a:hover { text-decoration: underline; }
+  ul.proj p { color: var(--muted); font-size: 13.5px; margin-top: 2px; }
+  footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12.5px; }
+  footer a { color: var(--muted); }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <span class="side-note">代 码 与 文 字 皆 是 手 艺</span>
-
-  <header class="rise d1">
-    <div class="seal">徐<br />记</div>
-    <div>
-      <h1>xfy6238<span class="dot">.</span></h1>
-      <p class="sub">iOS 老本行，<b>在做 AI 应用</b>。这里放我的开源项目和技术文章——匹配诊断 Agent、离线翻译工具，以及一路上的调优笔记。</p>
-    </div>
+  <header class="site">
+    <h1>技术笔记</h1>
+    <p>AI 应用开发 · RAG 检索 · Agent 工程化——实践记录与开源项目。</p>
+    <nav>
+      <a class="active" href="/">文章</a>
+      <a href="#projects">开源</a>
+      <a href="https://github.com/xfy6238">GitHub</a>
+    </nav>
   </header>
 
-  <hr class="rule rise d2" />
+  <section>
+    <h2>最新文章</h2>
 
-  <section class="rise d3">
-    <h2>开源项目 <small>OPEN SOURCE</small></h2>
-    <p class="section-desc">三个置顶代表作：一个 AI 应用，一个趁手工具，一段 iOS 老本行。</p>
+    <article class="post">
+      <h3><a href="#">Qwen 小模型选型：0.6B～0.8B 档的联调保底实践</a></h3>
+      <div class="meta">小模型 · 待发布</div>
+      <p>分类打标与摘要压缩的前置漏斗：什么交给小模型、什么必须回大模型，以及温度与模板约束。</p>
+    </article>
 
-    <a class="repo" href="https://github.com/xfy6238/jobmatch-agent">
-      <span class="idx">01</span>
-      <span>
-        <h3>jobmatch-agent <span class="tag">AI 应用</span></h3>
-        <p>求职匹配诊断 + 模拟面试：FastAPI + RAG 混合检索 + React。自带 20 条虚构样例，无 Key 可跑通 10/10 评测。</p>
-      </span>
-      <span style="text-align:right"><span class="lang">Python · TS</span><br /><span class="arrow">→</span></span>
-    </a>
+    <article class="post">
+      <h3><a href="#">RAG 切片 500/100 与混合检索 α=0.6 是怎么测出来的</a></h3>
+      <div class="meta">RAG · 待发布</div>
+      <p>按句聚合切片、BM25 网格搜索、Hit@3 与引用率的取舍过程。</p>
+    </article>
 
-    <a class="repo" href="https://github.com/xfy6238/LocalBob">
-      <span class="idx">02</span>
-      <span>
-        <h3>LocalBob <span class="tag">macOS 工具</span></h3>
-        <p>菜单栏离线翻译：Swift 6 零第三方依赖，只调本机 Ollama，不上云。</p>
-      </span>
-      <span style="text-align:right"><span class="lang">Swift</span><br /><span class="arrow">→</span></span>
-    </a>
-
-    <a class="repo" href="https://github.com/xfy6238/GPUImageDemo">
-      <span class="idx">03</span>
-      <span>
-        <h3>GPUImageDemo <span class="tag">iOS</span></h3>
-        <p>学习 GPUImage 的 Demo，图像处理的起点。</p>
-      </span>
-      <span style="text-align:right"><span class="lang">ObjC</span><br /><span class="arrow">→</span></span>
-    </a>
+    <article class="post">
+      <h3><a href="#">从私有 JD 库到脱敏开源：一次可展示的改造</a></h3>
+      <div class="meta">开源 · 待发布</div>
+      <p>真实数据哪些不能上、下沉样例库的设计、评测如何保持 10/10。</p>
+    </article>
   </section>
 
-  <hr class="rule rise d4" />
-
-  <section class="rise d5">
-    <h2>文章 <small>NOTES</small></h2>
-    <p class="section-desc">小模型选型、RAG 切片评定、Agent 工程化的实战笔记，整理后陆续搬上来。</p>
-    <ul class="soon">
-      <li>Qwen 小模型选型：0.6B～0.8B 档的联调保底实践</li>
-      <li>RAG 切片 500/100 与 BM25 α=0.6 是怎么测出来的</li>
-      <li>从 293 条真实 JD 到脱敏开源：一次可展示的改造</li>
+  <section id="projects">
+    <h2>开源项目</h2>
+    <ul class="proj">
+      <li>
+        <a href="https://github.com/xfy6238/jobmatch-agent">jobmatch-agent</a>
+        <span class="tag">AI 应用</span>
+        <p>求职匹配诊断 + 模拟面试（FastAPI + RAG + React），自带虚构样例，无 Key 可跑。</p>
+      </li>
+      <li>
+        <a href="https://github.com/xfy6238/LocalBob">LocalBob</a>
+        <span class="tag">macOS 工具</span>
+        <p>菜单栏离线翻译，Swift 6 零依赖，只调本机 Ollama。</p>
+      </li>
+      <li>
+        <a href="https://github.com/xfy6238/GPUImageDemo">GPUImageDemo</a>
+        <span class="tag">iOS</span>
+        <p>学习 GPUImage 的 Demo。</p>
+      </li>
     </ul>
   </section>
 
-  <footer class="rise d6">
-    <span><a href="https://github.com/xfy6238">GitHub 主页</a> · 欢迎提 Issue 交流</span>
-    <span>GitHub Pages 托管 · 单文件无构建</span>
+  <footer>
+    GitHub Pages 托管 · <a href="https://github.com/xfy6238/xfy6238.github.io">本站源码</a>
   </footer>
 </div>
 </body>
