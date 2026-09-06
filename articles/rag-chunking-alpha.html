@@ -27,105 +27,269 @@
         --teal-soft: #e6f4f2;
         --radius: 16px;
       }
-      * { box-sizing: border-box; margin: 0; padding: 0; }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
       body {
-        font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont,
-          "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        font-family:
+          "Noto Sans SC",
+          -apple-system,
+          BlinkMacSystemFont,
+          "PingFang SC",
+          "Hiragino Sans GB",
+          "Microsoft YaHei",
+          sans-serif;
         background: var(--bg);
         color: var(--ink);
         line-height: 1.9;
         -webkit-font-smoothing: antialiased;
       }
-      .wrap { max-width: 780px; margin: 0 auto; padding: 0 28px 90px; }
+      .wrap {
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 0 28px 90px;
+      }
       .topbar {
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 22px 0; font-size: 13px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 22px 0;
+        font-size: 13px;
       }
       .brand {
-        font-family: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
-        font-size: 13px; color: var(--ink); text-decoration: none;
+        font-family:
+          ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
+        font-size: 13px;
+        color: var(--ink);
+        text-decoration: none;
       }
       .brand i {
-        display: inline-block; width: 9px; height: 9px; border-radius: 50%;
-        background: var(--teal); margin-right: 8px;
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--teal);
+        margin-right: 8px;
       }
-      .topbar nav { display: flex; gap: 22px; }
-      .topbar nav a { color: var(--muted); text-decoration: none; font-size: 13.5px; }
-      .topbar nav a:hover { color: var(--teal-deep); }
+      .topbar nav {
+        display: flex;
+        gap: 22px;
+      }
+      .topbar nav a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 13.5px;
+      }
+      .topbar nav a:hover {
+        color: var(--teal-deep);
+      }
       @keyframes rise {
-        from { opacity: 0; transform: translateY(22px); }
-        to { opacity: 1; transform: none; }
+        from {
+          opacity: 0;
+          transform: translateY(22px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
       }
-      .rise { opacity: 0; animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
-      .d1 { animation-delay: 0.05s; } .d2 { animation-delay: 0.15s; }
-      article header { padding: 56px 0 8px; }
+      .rise {
+        opacity: 0;
+        animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+      }
+      .d1 {
+        animation-delay: 0.05s;
+      }
+      .d2 {
+        animation-delay: 0.15s;
+      }
+      article header {
+        padding: 56px 0 8px;
+      }
       .kicker {
-        display: inline-flex; align-items: center; gap: 8px;
-        font-size: 12px; letter-spacing: 0.22em; color: var(--teal-deep);
-        font-weight: 700; margin-bottom: 16px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        letter-spacing: 0.22em;
+        color: var(--teal-deep);
+        font-weight: 700;
+        margin-bottom: 16px;
       }
       .kicker::before {
-        content: ""; width: 26px; height: 2px; background: var(--teal); border-radius: 2px;
+        content: "";
+        width: 26px;
+        height: 2px;
+        background: var(--teal);
+        border-radius: 2px;
       }
       h1 {
-        font-family: "Noto Serif SC", serif; font-weight: 900;
-        font-size: clamp(28px, 4.6vw, 40px); line-height: 1.45;
+        font-family: "Noto Serif SC", serif;
+        font-weight: 900;
+        font-size: clamp(28px, 4.6vw, 40px);
+        line-height: 1.45;
       }
-      .byline { color: var(--faint); font-size: 13px; margin-top: 14px; }
+      .byline {
+        color: var(--faint);
+        font-size: 13px;
+        margin-top: 14px;
+      }
       .verdict {
-        background: var(--ink); color: #f4f4f2; border-radius: var(--radius);
-        padding: 28px 30px; margin: 32px 0 8px;
+        background: var(--ink);
+        color: #f4f4f2;
+        border-radius: var(--radius);
+        padding: 28px 30px;
+        margin: 32px 0 8px;
       }
-      .verdict .t { font-size: 12px; letter-spacing: 0.2em; color: #5eead4; font-weight: 700; }
-      .verdict p { font-family: "Noto Serif SC", serif; font-size: 19px; margin-top: 10px; line-height: 1.7; }
+      .verdict .t {
+        font-size: 12px;
+        letter-spacing: 0.2em;
+        color: #5eead4;
+        font-weight: 700;
+      }
+      .verdict p {
+        font-family: "Noto Serif SC", serif;
+        font-size: 19px;
+        margin-top: 10px;
+        line-height: 1.7;
+        color: #f4f4f2;
+      }
       .verdict code {
         font-family: ui-monospace, "JetBrains Mono", monospace;
-        background: rgba(255,255,255,0.1); padding: 1px 8px; border-radius: 6px; font-size: 16px;
+        background: rgba(255, 255, 255, 0.14);
+        color: #99f6e4;
+        padding: 1px 8px;
+        border-radius: 6px;
+        font-size: 16px;
       }
       h2 {
-        font-family: "Noto Serif SC", serif; font-size: 21px; font-weight: 700;
-        margin: 52px 0 14px; padding-top: 6px;
+        font-family: "Noto Serif SC", serif;
+        font-size: 21px;
+        font-weight: 700;
+        margin: 52px 0 14px;
+        padding-top: 6px;
       }
       h2 .n {
-        display: inline-grid; place-items: center; width: 30px; height: 30px;
-        background: var(--teal-soft); color: var(--teal-deep); border-radius: 9px;
-        font-size: 15px; margin-right: 10px; vertical-align: 2px;
+        display: inline-grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        background: var(--teal-soft);
+        color: var(--teal-deep);
+        border-radius: 9px;
+        font-size: 15px;
+        margin-right: 10px;
+        vertical-align: 2px;
       }
-      p { font-size: 15px; color: #2b2e33; margin: 12px 0; }
-      p code, li code {
-        font-family: ui-monospace, "JetBrains Mono", monospace; font-size: 13px;
-        background: #eef0f2; padding: 1px 7px; border-radius: 6px;
+      p {
+        font-size: 15px;
+        color: #2b2e33;
+        margin: 12px 0;
       }
-      ul { margin: 12px 0 12px 22px; font-size: 15px; color: #2b2e33; }
-      li { margin: 7px 0; }
-      li::marker { color: var(--teal); }
-      table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 18px 0 8px; }
-      th, td { padding: 10px 8px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
-      th:first-child, td:first-child { text-align: left; }
-      th { font-size: 12px; color: var(--muted); font-weight: 500; }
-      td { font-family: ui-monospace, "JetBrains Mono", monospace; font-size: 13px; }
-      tr.best td { background: var(--teal-soft); font-weight: 700; }
-      tr.best td:first-child { border-radius: 8px 0 0 8px; }
-      .tbl-wrap { overflow-x: auto; }
-      .cap { font-size: 12.5px; color: var(--faint); margin: 4px 0 16px; }
+      p code,
+      li code {
+        font-family: ui-monospace, "JetBrains Mono", monospace;
+        font-size: 13px;
+        background: #eef0f2;
+        padding: 1px 7px;
+        border-radius: 6px;
+      }
+      ul {
+        margin: 12px 0 12px 22px;
+        font-size: 15px;
+        color: #2b2e33;
+      }
+      li {
+        margin: 7px 0;
+      }
+      li::marker {
+        color: var(--teal);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13.5px;
+        margin: 18px 0 8px;
+      }
+      th,
+      td {
+        padding: 10px 8px;
+        border-bottom: 1px solid var(--line);
+        text-align: right;
+        white-space: nowrap;
+      }
+      th:first-child,
+      td:first-child {
+        text-align: left;
+      }
+      th {
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 500;
+      }
+      td {
+        font-family: ui-monospace, "JetBrains Mono", monospace;
+        font-size: 13px;
+      }
+      tr.best td {
+        background: var(--teal-soft);
+        font-weight: 700;
+      }
+      tr.best td:first-child {
+        border-radius: 8px 0 0 8px;
+      }
+      .tbl-wrap {
+        overflow-x: auto;
+      }
+      .cap {
+        font-size: 12.5px;
+        color: var(--faint);
+        margin: 4px 0 16px;
+      }
       pre {
-        background: var(--ink); color: #e8e6e3; border-radius: 12px;
-        padding: 20px 22px; font-size: 13px; line-height: 1.75; overflow-x: auto;
-        font-family: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
+        background: var(--ink);
+        color: #e8e6e3;
+        border-radius: 12px;
+        padding: 20px 22px;
+        font-size: 13px;
+        line-height: 1.75;
+        overflow-x: auto;
+        font-family:
+          ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
         margin: 16px 0;
       }
       .callout {
-        border: 1px solid var(--line); border-left: 4px solid var(--teal);
-        background: var(--card); border-radius: 0 12px 12px 0;
-        padding: 16px 20px; font-size: 14px; color: #2b2e33; margin: 18px 0;
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--teal);
+        background: var(--card);
+        border-radius: 0 12px 12px 0;
+        padding: 16px 20px;
+        font-size: 14px;
+        color: #2b2e33;
+        margin: 18px 0;
       }
       footer {
-        margin-top: 64px; padding-top: 22px; border-top: 1px solid var(--line);
-        color: var(--faint); font-size: 12.5px; display: flex;
-        justify-content: space-between; flex-wrap: wrap; gap: 8px;
+        margin-top: 64px;
+        padding-top: 22px;
+        border-top: 1px solid var(--line);
+        color: var(--faint);
+        font-size: 12.5px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
       }
-      footer a { color: var(--muted); }
-      @media (prefers-reduced-motion: reduce) { .rise { opacity: 1; animation: none; } }
+      footer a {
+        color: var(--muted);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .rise {
+          opacity: 1;
+          animation: none;
+        }
+      }
     </style>
   </head>
   <body>
@@ -143,58 +307,174 @@
         <header class="rise d1">
           <span class="kicker">RAG · 核心长文</span>
           <h1>RAG 切片 500/100 与混合检索 α=0.6 是怎么测出来的</h1>
-          <div class="byline">阅读约 8 分钟 · 20 条黄金集 · 8 指标 · 4 档切片网格</div>
+          <div class="byline">
+            阅读约 8 分钟 · 20 条黄金集 · 8 指标 · 4 档切片网格
+          </div>
         </header>
 
         <div class="verdict rise d2">
           <span class="t">结论先行</span>
-          <p>按句聚合 <code>500字 / 重叠100</code> 为当前最优：Hit@3 0.917、Citation 0.75；混合检索 <code>final = 0.6·向量 + 0.4·BM25</code>。评测固定 20 条黄金集，任一指标跌超 0.05 即告警。</p>
+          <p>
+            按句聚合 <code>500字 / 重叠100</code> 为当前最优：Hit@3
+            0.917、Citation 0.75；混合检索
+            <code>final = 0.6·向量 + 0.4·BM25</code>。评测固定 20
+            条黄金集，任一指标跌超 0.05 即告警。
+          </p>
         </div>
 
         <h2><span class="n">1</span>为什么要定量：感觉会骗人</h2>
-        <p>切片调优最常见的坑，是拿两三个例子说“800 字不断句读着更顺”就定稿。顺≠检得准≠引得对。我的做法是先冻结三样东西，再跑网格：</p>
+        <p>
+          切片调优最常见的坑，是拿两三个例子说“800
+          字不断句读着更顺”就定稿。顺≠检得准≠引得对。我的做法是先冻结三样东西，再跑网格：
+        </p>
         <ul>
-          <li><b>黄金集</b>：20 条——12 条画像→岗位（端到端 Top3 对不对），8 条问题→片段（RAG 切片本身准不准）。</li>
-          <li><b>8 个指标</b>：检索看 Hit@3 / Recall@10 / MRR / NDCG@10；切片看 Citation Precision / Faithfulness；成本看向量数 / p50 / Leak 率。</li>
-          <li><b>判定口径前置</b>：引用缺失直接 0 分；NDCG 按 expected 3-2-1 加权；Leak（串库/隐私片段混入）单独成项。</li>
+          <li>
+            <b>黄金集</b>：20 条——12 条画像→岗位（端到端 Top3 对不对），8
+            条问题→片段（RAG 切片本身准不准）。
+          </li>
+          <li>
+            <b>8 个指标</b>：检索看 Hit@3 / Recall@10 / MRR / NDCG@10；切片看
+            Citation Precision / Faithfulness；成本看向量数 / p50 / Leak 率。
+          </li>
+          <li>
+            <b>判定口径前置</b>：引用缺失直接 0 分；NDCG 按 expected 3-2-1
+            加权；Leak（串库/隐私片段混入）单独成项。
+          </li>
         </ul>
 
         <h2><span class="n">2</span>四档网格：300 / 500 / 800 / 1200</h2>
-        <p>四档都用同一套按句聚合（中文句末 + 换行 + 分号切句、保留分隔符，拼到 size 就在句界截断，单句超长才硬切，重叠起点回退到最近句首）。只变 size，overlap 固定 100。</p>
+        <p>
+          四档都用同一套按句聚合（中文句末 + 换行 + 分号切句、保留分隔符，拼到
+          size 就在句界截断，单句超长才硬切，重叠起点回退到最近句首）。只变
+          size，overlap 固定 100。
+        </p>
         <div class="tbl-wrap">
           <table>
             <thead>
-              <tr><th>SIZE</th><th>向量数</th><th>Hit@3</th><th>Recall@10</th><th>MRR</th><th>NDCG</th><th>Citation</th><th>Faith</th><th>Leak</th><th>p50</th></tr>
+              <tr>
+                <th>SIZE</th>
+                <th>向量数</th>
+                <th>Hit@3</th>
+                <th>Recall@10</th>
+                <th>MRR</th>
+                <th>NDCG</th>
+                <th>Citation</th>
+                <th>Faith</th>
+                <th>Leak</th>
+                <th>p50</th>
+              </tr>
             </thead>
             <tbody>
-              <tr><td>300</td><td>710</td><td>0.833</td><td>0.695</td><td>0.812</td><td>0.670</td><td>0.75</td><td>0.50</td><td>0.136</td><td>169ms</td></tr>
-              <tr class="best"><td>500 ★</td><td>491</td><td>0.917</td><td>0.75</td><td>0.861</td><td>0.727</td><td>0.75</td><td>0.50</td><td>0.189</td><td>184ms</td></tr>
-              <tr><td>800</td><td>407</td><td>0.917</td><td>0.75</td><td>0.861</td><td>0.722</td><td>0.625</td><td>0.25</td><td>0.189</td><td>175ms</td></tr>
-              <tr><td>1200</td><td>368</td><td>0.917</td><td>0.75</td><td>—</td><td>—</td><td>0.625</td><td>—</td><td>—</td><td>—</td></tr>
+              <tr>
+                <td>300</td>
+                <td>710</td>
+                <td>0.833</td>
+                <td>0.695</td>
+                <td>0.812</td>
+                <td>0.670</td>
+                <td>0.75</td>
+                <td>0.50</td>
+                <td>0.136</td>
+                <td>169ms</td>
+              </tr>
+              <tr class="best">
+                <td>500 ★</td>
+                <td>491</td>
+                <td>0.917</td>
+                <td>0.75</td>
+                <td>0.861</td>
+                <td>0.727</td>
+                <td>0.75</td>
+                <td>0.50</td>
+                <td>0.189</td>
+                <td>184ms</td>
+              </tr>
+              <tr>
+                <td>800</td>
+                <td>407</td>
+                <td>0.917</td>
+                <td>0.75</td>
+                <td>0.861</td>
+                <td>0.722</td>
+                <td>0.625</td>
+                <td>0.25</td>
+                <td>0.189</td>
+                <td>175ms</td>
+              </tr>
+              <tr>
+                <td>1200</td>
+                <td>368</td>
+                <td>0.917</td>
+                <td>0.75</td>
+                <td>—</td>
+                <td>—</td>
+                <td>0.625</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+              </tr>
             </tbody>
           </table>
         </div>
-        <p class="cap">注：1200 档召回与 800 持平、引用同样掉到 0.625，未继续细测排序项；★ 为当前最优。</p>
-        <div class="callout">读表三句话：<b>800 和 500 召回一样，但 800 的引用从 0.75 跌到 0.625、保真从 0.5 跌到 0.25</b>——片越大，模型越爱从同一片里“脑补”；<b>300 引用虽保住 0.75，却把一段切成两片</b>，要拼多片才够判，Hit@3 跌到 0.833；500 的 NDCG 0.727 还是四档最高，排序也最优。</div>
+        <p class="cap">
+          注：1200 档召回与 800 持平、引用同样掉到 0.625，未继续细测排序项；★
+          为当前最优。
+        </p>
+        <div class="callout">
+          读表三句话：<b
+            >800 和 500 召回一样，但 800 的引用从 0.75 跌到 0.625、保真从 0.5
+            跌到 0.25</b
+          >——片越大，模型越爱从同一片里“脑补”；<b
+            >300 引用虽保住 0.75，却把一段切成两片</b
+          >，要拼多片才够判，Hit@3 跌到 0.833；500 的 NDCG 0.727
+          还是四档最高，排序也最优。
+        </div>
 
         <h2><span class="n">3</span>切片算法：按句聚合是关键</h2>
-        <p>固定字符数硬切会在句中腰斩，引用回跳时半句话对不上。实现只有三步，落在 <code>ingest.py chunk_text</code>：</p>
-        <pre>按 [。！？\n；;] 切句（保留分隔符）
+        <p>
+          固定字符数硬切会在句中腰斩，引用回跳时半句话对不上。实现只有三步，落在
+          <code>ingest.py chunk_text</code>：
+        </p>
+        <pre>
+按 [。！？\n；;] 切句（保留分隔符）
 逐句拼装 → 长度将超 size 时在句界截断成片
 重叠 overlap 个字符，但起点回退到最近的句首/空格之后</pre>
-        <p>元数据每片都带 <code>url / company / title / salary</code>，引用字符串必须原文命中才算分——这是 Citation 指标能真实反映“可回跳”的原因。</p>
+        <p>
+          元数据每片都带
+          <code>url / company / title / salary</code
+          >，引用字符串必须原文命中才算分——这是 Citation
+          指标能真实反映“可回跳”的原因。
+        </p>
 
         <h2><span class="n">4</span>混合检索：向量 + 自研 BM25</h2>
-        <p>纯向量检索对短词、型号、精确术语不敏感（比如“α”“MJ00xx”这类 token），所以加了一路经典 BM25（k1=1.5、b=0.75，中文按字/词混合分词），加权融合：</p>
-        <pre>final = α · vec_norm + (1 − α) · bm25_norm    # Top20 取并后重排
+        <p>
+          纯向量检索对短词、型号、精确术语不敏感（比如“α”“MJ00xx”这类
+          token），所以加了一路经典
+          BM25（k1=1.5、b=0.75，中文按字/词混合分词），加权融合：
+        </p>
+        <pre>
+final = α · vec_norm + (1 − α) · bm25_norm    # Top20 取并后重排
 α = 0.6（默认，HYBRID_ALPHA 环境变量可调，设 1.0 即退化纯向量）</pre>
-        <p>α 的取值同样是网格定的：0.6 附近检索最稳；往 1.0 走精确词召回掉，往 0.3 走语义排序散。开关用 <code>HYBRID_ENABLED</code> 控制，异常自动回退纯向量，保证演示不断。</p>
+        <p>
+          α 的取值同样是网格定的：0.6 附近检索最稳；往 1.0 走精确词召回掉，往
+          0.3 走语义排序散。开关用
+          <code>HYBRID_ENABLED</code> 控制，异常自动回退纯向量，保证演示不断。
+        </p>
 
         <h2><span class="n">5</span>复现清单</h2>
         <ul>
-          <li>代码与评测脚本已开源：<code>jobmatch-agent</code> 仓库（<code>backend/ingest.py</code>、<code>hybrid.py</code>、<code>eval.py</code>）。</li>
-          <li>切片参数开箱即用：<code>CHUNK_SIZE=500 CHUNK_OVERLAP=100</code>（环境变量可覆盖）。</li>
-          <li>换成你自己的 JD 后，先 frozen 自己的 20 条黄金集，再跑网格——数字会变，流程不变。</li>
+          <li>
+            代码与评测脚本已开源：<code>jobmatch-agent</code>
+            仓库（<code>backend/ingest.py</code>、<code>hybrid.py</code>、<code>eval.py</code>）。
+          </li>
+          <li>
+            切片参数开箱即用：<code>CHUNK_SIZE=500 CHUNK_OVERLAP=100</code
+            >（环境变量可覆盖）。
+          </li>
+          <li>
+            换成你自己的 JD 后，先 frozen 自己的 20
+            条黄金集，再跑网格——数字会变，流程不变。
+          </li>
         </ul>
       </article>
 
