@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>xfy6238 · 个人主页</title>
+<style>
+  :root { --ink: #1c1917; --muted: #78716c; --line: #e8e6e1; --paper: #fafaf9; --accent: #5a6c5e; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--paper); color: var(--ink); line-height: 1.8; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 72px 24px; }
+  h1 { font-size: 30px; letter-spacing: -0.02em; }
+  .sub { color: var(--muted); margin-top: 8px; font-size: 15px; }
+  hr { border: none; border-top: 1px solid var(--line); margin: 36px 0; }
+  h2 { font-size: 17px; margin-bottom: 12px; }
+  .repo { display: block; border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; text-decoration: none; color: inherit; background: #fff; transition: transform .15s ease; }
+  .repo:hover { transform: translateY(-2px); }
+  .repo b { font-size: 16px; }
+  .repo span { display: block; color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .tag { display: inline-block; font-size: 11px; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 0 8px; margin-left: 8px; vertical-align: middle; }
+  footer { color: var(--muted); font-size: 12px; margin-top: 40px; }
+  a.more { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>xfy6238</h1>
+  <p class="sub">iOS 老本行 · 在做 AI 应用。文章和开源项目都在这儿。</p>
+  <hr />
+  <h2>开源项目</h2>
+  <a class="repo" href="https://github.com/xfy6238/jobmatch-agent">
+    <b>jobmatch-agent<span class="tag">AI 应用</span></b>
+    <span>求职匹配诊断 + 模拟面试：FastAPI + RAG + React，自带 20 条虚构样例，无 Key 可跑。</span>
+  </a>
+  <a class="repo" href="https://github.com/xfy6238/LocalBob">
+    <b>LocalBob<span class="tag">macOS 工具</span></b>
+    <span>菜单栏离线翻译：Swift 6 零依赖，只调本机 Ollama。</span>
+  </a>
+  <a class="repo" href="https://github.com/xfy6238/GPUImageDemo">
+    <b>GPUImageDemo<span class="tag">iOS</span></b>
+    <span>学习 GPUImage 的 Demo。</span>
+  </a>
+  <hr />
+  <h2>文章</h2>
+  <p class="sub">施工中——小模型选型、RAG 调优、Agent 工程化的笔记会陆续搬上来。</p>
+  <footer>
+    <a class="more" href="https://github.com/xfy6238">GitHub 主页</a> ·
+    由 GitHub Pages 托管
+  </footer>
+</div>
+</body>
+</html>
