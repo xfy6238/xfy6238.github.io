@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>缺陷自治修复 Agent：拉取→分类→修复→验证→两段式回写 · 技术笔记</title>
+    <meta
+      name="description"
+      content="本地执行的缺陷修复 Agent：四件套形态、两段式回写、护栏设计与失败预算。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #fbfbfa;
+        --card: #ffffff;
+        --ink: #16181d;
+        --muted: #6b7280;
+        --faint: #9ca3af;
+        --line: #e7e5e0;
+        --teal: #0f766e;
+        --teal-deep: #115e59;
+        --teal-soft: #e6f4f2;
+        --radius: 16px;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont,
+          "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        line-height: 1.9;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 780px; margin: 0 auto; padding: 0 28px 90px; }
+      .topbar {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 22px 0; font-size: 13px;
+      }
+      .brand {
+        font-family: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
+        font-size: 13px; color: var(--ink); text-decoration: none;
+      }
+      .brand i {
+        display: inline-block; width: 9px; height: 9px; border-radius: 50%;
+        background: var(--teal); margin-right: 8px;
+      }
+      .topbar nav { display: flex; gap: 22px; }
+      .topbar nav a { color: var(--muted); text-decoration: none; font-size: 13.5px; }
+      .topbar nav a:hover { color: var(--teal-deep); }
+      @keyframes rise {
+        from { opacity: 0; transform: translateY(22px); }
+        to { opacity: 1; transform: none; }
+      }
+      .rise { opacity: 0; animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+      .d1 { animation-delay: 0.05s; } .d2 { animation-delay: 0.15s; }
+      article header { padding: 56px 0 8px; }
+      .kicker {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-size: 12px; letter-spacing: 0.22em; color: var(--teal-deep);
+        font-weight: 700; margin-bottom: 16px;
+      }
+      .kicker::before {
+        content: ""; width: 26px; height: 2px; background: var(--teal); border-radius: 2px;
+      }
+      h1 {
+        font-family: "Noto Serif SC", serif; font-weight: 900;
+        font-size: clamp(28px, 4.6vw, 40px); line-height: 1.45;
+      }
+      .byline { color: var(--faint); font-size: 13px; margin-top: 14px; }
+      .verdict {
+        background: var(--ink); color: #f4f4f2; border-radius: var(--radius);
+        padding: 28px 30px; margin: 32px 0 8px;
+      }
+      .verdict .t { font-size: 12px; letter-spacing: 0.2em; color: #5eead4; font-weight: 700; }
+      .verdict p {
+        font-family: "Noto Serif SC", serif; font-size: 19px; margin-top: 10px;
+        line-height: 1.7; color: #f4f4f2;
+      }
+      .verdict code {
+        font-family: ui-monospace, "JetBrains Mono", monospace;
+        background: rgba(255, 255, 255, 0.14); color: #99f6e4;
+        padding: 1px 8px; border-radius: 6px; font-size: 16px;
+      }
+      h2 {
+        font-family: "Noto Serif SC", serif; font-size: 21px; font-weight: 700;
+        margin: 52px 0 14px; padding-top: 6px;
+      }
+      h2 .n {
+        display: inline-grid; place-items: center; width: 30px; height: 30px;
+        background: var(--teal-soft); color: var(--teal-deep); border-radius: 9px;
+        font-size: 15px; margin-right: 10px; vertical-align: 2px;
+      }
+      p { font-size: 15px; color: #2b2e33; margin: 12px 0; }
+      p code, li code, td code {
+        font-family: ui-monospace, "JetBrains Mono", monospace; font-size: 13px;
+        background: #eef0f2; padding: 1px 7px; border-radius: 6px;
+      }
+      ul, ol { margin: 12px 0 12px 22px; font-size: 15px; color: #2b2e33; }
+      li { margin: 7px 0; }
+      li::marker { color: var(--teal); }
+      table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 18px 0 8px; }
+      th, td { padding: 11px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+      th { font-size: 12px; color: var(--muted); font-weight: 500; white-space: nowrap; }
+      pre {
+        background: var(--ink); color: #e8e6e3; border-radius: 12px;
+        padding: 20px 22px; font-size: 13px; line-height: 1.8; overflow-x: auto;
+        font-family: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
+        margin: 16px 0;
+      }
+      .callout {
+        border: 1px solid var(--line); border-left: 4px solid var(--teal);
+        background: var(--card); border-radius: 0 12px 12px 0;
+        padding: 16px 20px; font-size: 14px; color: #2b2e33; margin: 18px 0;
+      }
+      footer {
+        margin-top: 64px; padding-top: 22px; border-top: 1px solid var(--line);
+        color: var(--faint); font-size: 12.5px; display: flex;
+        justify-content: space-between; flex-wrap: wrap; gap: 8px;
+      }
+      footer a { color: var(--muted); }
+      @media (prefers-reduced-motion: reduce) { .rise { opacity: 1; animation: none; } }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="topbar rise d1">
+        <a class="brand" href="/"><i></i>tech-notes</a>
+        <nav>
+          <a href="/#posts">文章</a>
+          <a href="/#projects">开源</a>
+          <a href="https://github.com/xfy6238">GitHub</a>
+        </nav>
+      </div>
+
+      <article>
+        <header class="rise d1">
+          <span class="kicker">AGENT 工程 · 缺陷自治</span>
+          <h1>缺陷自治修复 Agent：拉取→分类→修复→验证→两段式回写</h1>
+          <div class="byline">阅读约 9 分钟 · 四件套形态 · 两段式回写 · 护栏与失败预算</div>
+        </header>
+
+        <div class="verdict rise d2">
+          <span class="t">结论先行</span>
+          <p>能自动修的 bug，应该以最少人工干预闭环：<code>拉取 → 分类 → 修复 → 跑测试 → 人工批准 → 回写</code>。关键只有三处——<code>写操作永远两段式</code>、<code>护栏只拒绝不回滚</code>、<code>失败预算写死</code>。</p>
+        </div>
+
+        <h2>背景：修 bug 的时间都去哪了</h2>
+        <p>迭代里永远有一类 bug：必现、定位清晰、改动小（空指针判空、越界、文案错位、参数传错）。它们单个修起来都不到半小时，但流程很碎：看单、拉分支、复现、改、跑测试、更新单子、等验证。碎时间加起来，一个迭代能吃掉几个人日。</p>
+        <p>这类活恰好适合本地 Agent：它直接读代码仓、改代码、跑测试?n飞全程不需要人。而“回写单子”这一步必须卡人工——让 Agent 自己关单，等于把质量 gate 交了出去。所以形态很明确：<b>读和修自治，写要批准</b>。</p>
+        <p>注意这东西只能是<b>本地执行型</b>：能力依赖本地代码仓 + 本地跑测试，做成网页版要换架构，还丢掉核心优势。</p>
+
+        <h2><span class="n">1</span>四件套：它到底由什么组成</h2>
+        <p>这不是一个单一程序，而是一套分层件，每层职责单一：</p>
+        <table>
+          <thead><tr><th>件</th><th>职责</th><th>关键点</th></tr></thead>
+          <tbody>
+            <tr><td><code>修复 skill</code>（Agent 本体）</td><td>定义角色与工作流：拉取→分类→修复→测试→回写</td><td>分类决策表写死，不靠临场发挥</td></tr>
+            <tr><td><code>MCP 工具层</code></td><td>4 个工具：查列表 / 查详情 / 生成修改提案 / 提交更新</td><td>allowlist、状态机、幂等键、审批签名</td></tr>
+            <tr><td><code>护栏扩展</code></td><td>拦截危险路径写入，记审计日志</td><td>只拒绝不回滚，防丢用户改动</td></tr>
+            <tr><td><code>查询 skill</code> + <code>改进者 skill</code></td><td>查单汇总；拿人类反馈生成对本体的最小修改提案</td><td>改进也要人确认才生效</td></tr>
+          </tbody>
+        </table>
+        <div class="callout">分层的意义：换缺陷平台只换 MCP 层；换团队规范只改护栏黑名单；工作流本身不动。</div>
+
+        <h2><span class="n">2</span>两段式回写：写操作的设计</h2>
+        <p>所有对外写动作拆成两段，中间必须经过人：</p>
+        <pre>tapd_get_bugs（按优先级/模块拉取）
+  → 决策表分类 [可自动修] / [转人工]
+  → get_detail 深挖 → 定位根因 → 改代码（受护栏约束）
+  → 跑测试（失败最多再修 3 次）
+  → prepare_update 生成提案预览（含 diff + 测试结果）
+  → ★ 人工批准（approve，签发 approval_token）
+  → commit_update（凭 token，一次有效，幂等）</pre>
+        <p>三处细节：<b>token 一次有效</b>，用过即废，防重放；<b>幂等键</b>，同一提案重复提交只生效一次，崩溃重启也不怕；<b>allowlist fail-closed</b>，状态不在白名单里默认拒绝，而不是默认放行。</p>
+
+        <h2><span class="n">3</span>护栏：只拒绝，不回滚</h2>
+        <p>护栏拦截三类写入：敏感目录（如鉴权、支付、配置、密钥文件）、黑名单路径、越权操作。策略上刻意选了“只拒绝不自动回滚”：</p>
+        <ul>
+          <li>自动回滚可能丢掉用户正在写的改动，误伤比漏放更贵。</li>
+          <li>拒绝时给出明确原因 + 审计日志，人在回放时能看清边界。</li>
+          <li>黑名单放配置文件里，换团队只改配置，不动代码。</li>
+        </ul>
+        <p>凭据同样分级：真实 token 文件权限 0600，分发只带 <code>.env.example</code>，真实 <code>.env</code> 永不进仓库；环境变量优先于文件，文档只写一种口径，避免配错地方。</p>
+
+        <h2><span class="n">4</span>分类决策表与失败预算</h2>
+        <p>Agent 最危险的不是修错，而是不知道停。两道闸：</p>
+        <ul>
+          <li><b>分类闸</b>：黑名单命中 → 直接转人工；资金/权限风险 → 转人工；类型不在可自动修清单 → 转人工。默认面要窄，跑顺了再放宽。</li>
+          <li><b>失败预算</b>：单个 bug 修 3 次不过就停；连续 2 个 bug 失败整会话停并上报；单会话最多处理 5 个。预算写死在 skill 里，不是“建议”。</li>
+        </ul>
+
+        <h2><span class="n">5</span>大小模型分工：别让小模型干它干不了的</h2>
+        <p>实测结论：小模型能干分类打标和摘要压缩，干不了多步工具调用和稳定结构化输出。所以分工是：<b>小模型只做初筛</b>（打标签、压摘要），<b>大模型做修复和定稿</b>。配套三件套：只让小模型输出枚举标签或纯文本（不准要 JSON）、低温度+模板约束、失败重试一次后转大模型兜底。先小批量评测，行了再全量。</p>
+
+        <h2><span class="n">6</span>落地建议</h2>
+        <ul>
+          <li>分发用包机制（skills + extensions 约定目录自动发现，一条安装命令），团队内项目级声明自动安装。</li>
+          <li>先只跑前半段验证：真实拉取 → 分类 → 生成提案（不提交），确认分类与提案质量后再开提交。</li>
+          <li>攒真实反馈：按“日期｜单号｜现象｜误判｜期望”记，攒够一批再让改进者 skill 提最小修改。</li>
+        </ul>
+      </article>
+
+      <footer>
+        <span><a href="/">← 返回首页</a></span>
+        <span>tech-notes · GitHub Pages 托管</span>
+      </footer>
+    </div>
+  </body>
+</html>
