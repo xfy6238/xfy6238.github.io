@@ -42,7 +42,11 @@
           "Microsoft YaHei",
           sans-serif;
         background:
-          radial-gradient(1000px 420px at 50% -160px, #e6f4f2 0%, transparent 65%),
+          radial-gradient(
+            1000px 420px at 50% -160px,
+            #e6f4f2 0%,
+            transparent 65%
+          ),
           var(--bg);
         color: var(--ink);
         line-height: 1.8;
@@ -67,11 +71,21 @@
         opacity: 0;
         animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
       }
-      .d1 { animation-delay: 0.05s; }
-      .d2 { animation-delay: 0.15s; }
-      .d3 { animation-delay: 0.25s; }
-      .d4 { animation-delay: 0.35s; }
-      .d5 { animation-delay: 0.45s; }
+      .d1 {
+        animation-delay: 0.05s;
+      }
+      .d2 {
+        animation-delay: 0.15s;
+      }
+      .d3 {
+        animation-delay: 0.25s;
+      }
+      .d4 {
+        animation-delay: 0.35s;
+      }
+      .d5 {
+        animation-delay: 0.45s;
+      }
       /* ── masthead ── */
       .topbar {
         display: flex;
@@ -81,7 +95,8 @@
         font-size: 13px;
       }
       .brand {
-        font-family: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
+        font-family:
+          ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
         font-size: 13px;
         font-weight: 500;
         color: var(--ink);
@@ -96,14 +111,22 @@
         margin-right: 8px;
         vertical-align: baseline;
       }
-      .topbar nav { display: flex; gap: 22px; }
+      .topbar nav {
+        display: flex;
+        gap: 22px;
+      }
       .topbar nav a {
         color: var(--muted);
         text-decoration: none;
         font-size: 13.5px;
       }
-      .topbar nav a:hover { color: var(--teal-deep); }
-      .hero { padding: 72px 0 12px; max-width: 720px; }
+      .topbar nav a:hover {
+        color: var(--teal-deep);
+      }
+      .hero {
+        padding: 72px 0 12px;
+        max-width: 720px;
+      }
       .kicker {
         display: inline-flex;
         align-items: center;
@@ -128,7 +151,10 @@
         line-height: 1.28;
         letter-spacing: 0.005em;
       }
-      .hero h1 em { font-style: normal; color: var(--teal-deep); }
+      .hero h1 em {
+        font-style: normal;
+        color: var(--teal-deep);
+      }
       .hero p {
         color: var(--muted);
         font-size: 15.5px;
@@ -155,7 +181,9 @@
         letter-spacing: 0.08em;
       }
       /* ── sections ── */
-      section { margin-top: 64px; }
+      section {
+        margin-top: 64px;
+      }
       .sec-head {
         display: flex;
         align-items: baseline;
@@ -172,7 +200,9 @@
         color: var(--muted);
         text-decoration: none;
       }
-      .sec-head a:hover { color: var(--teal-deep); }
+      .sec-head a:hover {
+        color: var(--teal-deep);
+      }
       /* featured post */
       .featured {
         display: block;
@@ -183,7 +213,9 @@
         text-decoration: none;
         position: relative;
         overflow: hidden;
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease;
       }
       .featured::after {
         content: "01";
@@ -200,7 +232,12 @@
         transform: translateY(-3px);
         box-shadow: 0 24px 50px -20px rgba(22, 24, 29, 0.45);
       }
-      .featured .meta { font-size: 12px; letter-spacing: 0.18em; color: #5eead4; font-weight: 700; }
+      .featured .meta {
+        font-size: 12px;
+        letter-spacing: 0.18em;
+        color: #5eead4;
+        font-weight: 700;
+      }
       .featured h3 {
         font-family: "Noto Serif SC", serif;
         font-size: clamp(21px, 3vw, 27px);
@@ -209,7 +246,12 @@
         line-height: 1.5;
         max-width: 640px;
       }
-      .featured p { color: #b6bcc4; font-size: 14px; margin-top: 10px; max-width: 600px; }
+      .featured p {
+        color: #b6bcc4;
+        font-size: 14px;
+        margin-top: 10px;
+        max-width: 600px;
+      }
       /* post grid */
       .grid {
         display: grid;
@@ -217,7 +259,11 @@
         gap: 16px;
         margin-top: 16px;
       }
-      @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+      @media (max-width: 640px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
       .post {
         display: block;
         background: var(--card);
@@ -226,16 +272,33 @@
         padding: 24px 24px 22px;
         text-decoration: none;
         color: inherit;
-        transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+        transition:
+          transform 0.22s ease,
+          box-shadow 0.22s ease,
+          border-color 0.22s ease;
       }
       .post:hover {
         transform: translateY(-3px);
         box-shadow: 0 16px 36px -20px rgba(22, 24, 29, 0.25);
         border-color: #cfc9bc;
       }
-      .post .meta { font-size: 11.5px; letter-spacing: 0.16em; color: var(--teal-deep); font-weight: 700; }
-      .post h3 { font-size: 16.5px; font-weight: 700; margin-top: 10px; line-height: 1.6; }
-      .post p { font-size: 13.5px; color: var(--muted); margin-top: 8px; }
+      .post .meta {
+        font-size: 11.5px;
+        letter-spacing: 0.16em;
+        color: var(--teal-deep);
+        font-weight: 700;
+      }
+      .post h3 {
+        font-size: 16.5px;
+        font-weight: 700;
+        margin-top: 10px;
+        line-height: 1.6;
+      }
+      .post p {
+        font-size: 13.5px;
+        color: var(--muted);
+        margin-top: 8px;
+      }
       /* projects */
       .proj {
         display: flex;
@@ -249,21 +312,38 @@
         margin-bottom: 12px;
         text-decoration: none;
         color: inherit;
-        transition: transform 0.22s ease, box-shadow 0.22s ease;
+        transition:
+          transform 0.22s ease,
+          box-shadow 0.22s ease;
       }
       .proj:hover {
         transform: translateX(4px);
         box-shadow: 0 14px 32px -20px rgba(22, 24, 29, 0.25);
       }
       .proj code {
-        font-family: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
+        font-family:
+          ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
         font-size: 14.5px;
         font-weight: 500;
         color: var(--teal-deep);
       }
-      .proj p { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
-      .proj .go { flex: none; color: var(--faint); font-size: 20px; transition: color 0.2s, transform 0.2s; }
-      .proj:hover .go { color: var(--teal); transform: translateX(3px); }
+      .proj p {
+        font-size: 13.5px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+      .proj .go {
+        flex: none;
+        color: var(--faint);
+        font-size: 20px;
+        transition:
+          color 0.2s,
+          transform 0.2s;
+      }
+      .proj:hover .go {
+        color: var(--teal);
+        transform: translateX(3px);
+      }
       footer {
         margin-top: 70px;
         padding-top: 22px;
@@ -275,9 +355,14 @@
         flex-wrap: wrap;
         gap: 8px;
       }
-      footer a { color: var(--muted); }
+      footer a {
+        color: var(--muted);
+      }
       @media (prefers-reduced-motion: reduce) {
-        .rise { opacity: 1; animation: none; }
+        .rise {
+          opacity: 1;
+          animation: none;
+        }
       }
     </style>
   </head>
@@ -295,7 +380,10 @@
       <div class="hero rise d2">
         <span class="kicker">AI 应用 · RAG · AGENT 工程</span>
         <h1>把调模型的<br />手感 <em>写下来</em>。</h1>
-        <p>小模型选型、检索调优、Agent 落地的实战记录——每个结论都有评测数字，每篇都附可跑的代码。</p>
+        <p>
+          小模型选型、检索调优、Agent
+          落地的实战记录——每个结论都有评测数字，每篇都附可跑的代码。
+        </p>
         <div class="stats">
           <div><b>03</b><span>实战文章</span></div>
           <div><b>03</b><span>开源项目</span></div>
@@ -308,16 +396,21 @@
           <h2>最新文章</h2>
           <a href="#">全部文章 →</a>
         </div>
-        <a class="featured" href="#">
+        <a class="featured" href="/articles/rag-chunking-alpha.html">
           <span class="meta">RAG · 核心长文</span>
           <h3>RAG 切片 500/100 与混合检索 α=0.6 是怎么测出来的</h3>
-          <p>按句聚合、四档切片网格、六档权重搜索——Hit@3 0.917 与引用率 0.75 背后的取舍全记录。</p>
+          <p>
+            按句聚合、四档切片网格、六档权重搜索——Hit@3 0.917 与引用率 0.75
+            背后的取舍全记录。
+          </p>
         </a>
         <div class="grid">
           <a class="post" href="#">
             <span class="meta">小模型</span>
             <h3>Qwen 小模型选型：0.6B～0.8B 档的联调保底实践</h3>
-            <p>分类打标前置漏斗：什么给小模型、什么回大模型，温度与模板约束。</p>
+            <p>
+              分类打标前置漏斗：什么给小模型、什么回大模型，温度与模板约束。
+            </p>
           </a>
           <a class="post" href="#">
             <span class="meta">开源</span>
@@ -335,7 +428,10 @@
         <a class="proj" href="https://github.com/xfy6238/jobmatch-agent">
           <span>
             <code>jobmatch-agent</code>
-            <p>求职匹配诊断 + 模拟面试（FastAPI + RAG + React），自带虚构样例，无 Key 可跑。</p>
+            <p>
+              求职匹配诊断 + 模拟面试（FastAPI + RAG + React），自带虚构样例，无
+              Key 可跑。
+            </p>
           </span>
           <span class="go">→</span>
         </a>
