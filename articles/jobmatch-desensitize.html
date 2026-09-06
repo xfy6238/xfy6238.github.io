@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>从私有 JD 库到脱敏开源：一次可展示的改造 · 技术笔记</title>
+    <meta
+      name="description"
+      content="真实数据哪些不能上、样例库设计、评测如何保持 10/10：一次脱敏开源的完整记录。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #fbfbfa;
+        --card: #ffffff;
+        --ink: #16181d;
+        --muted: #6b7280;
+        --faint: #9ca3af;
+        --line: #e7e5e0;
+        --teal: #0f766e;
+        --teal-deep: #115e59;
+        --teal-soft: #e6f4f2;
+        --radius: 16px;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont,
+          "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        line-height: 1.9;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 780px; margin: 0 auto; padding: 0 28px 90px; }
+      .topbar {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 22px 0; font-size: 13px;
+      }
+      .brand {
+        font-family: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
+        font-size: 13px; color: var(--ink); text-decoration: none;
+      }
+      .brand i {
+        display: inline-block; width: 9px; height: 9px; border-radius: 50%;
+        background: var(--teal); margin-right: 8px;
+      }
+      .topbar nav { display: flex; gap: 22px; }
+      .topbar nav a { color: var(--muted); text-decoration: none; font-size: 13.5px; }
+      .topbar nav a:hover { color: var(--teal-deep); }
+      @keyframes rise {
+        from { opacity: 0; transform: translateY(22px); }
+        to { opacity: 1; transform: none; }
+      }
+      .rise { opacity: 0; animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+      .d1 { animation-delay: 0.05s; } .d2 { animation-delay: 0.15s; }
+      article header { padding: 56px 0 8px; }
+      .kicker {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-size: 12px; letter-spacing: 0.22em; color: var(--teal-deep);
+        font-weight: 700; margin-bottom: 16px;
+      }
+      .kicker::before {
+        content: ""; width: 26px; height: 2px; background: var(--teal); border-radius: 2px;
+      }
+      h1 {
+        font-family: "Noto Serif SC", serif; font-weight: 900;
+        font-size: clamp(28px, 4.6vw, 40px); line-height: 1.45;
+      }
+      .byline { color: var(--faint); font-size: 13px; margin-top: 14px; }
+      .verdict {
+        background: var(--ink); color: #f4f4f2; border-radius: var(--radius);
+        padding: 28px 30px; margin: 32px 0 8px;
+      }
+      .verdict .t { font-size: 12px; letter-spacing: 0.2em; color: #5eead4; font-weight: 700; }
+      .verdict p {
+        font-family: "Noto Serif SC", serif; font-size: 19px; margin-top: 10px;
+        line-height: 1.7; color: #f4f4f2;
+      }
+      .verdict code {
+        font-family: ui-monospace, "JetBrains Mono", monospace;
+        background: rgba(255, 255, 255, 0.14); color: #99f6e4;
+        padding: 1px 8px; border-radius: 6px; font-size: 16px;
+      }
+      h2 {
+        font-family: "Noto Serif SC", serif; font-size: 21px; font-weight: 700;
+        margin: 52px 0 14px; padding-top: 6px;
+      }
+      h2 .n {
+        display: inline-grid; place-items: center; width: 30px; height: 30px;
+        background: var(--teal-soft); color: var(--teal-deep); border-radius: 9px;
+        font-size: 15px; margin-right: 10px; vertical-align: 2px;
+      }
+      p { font-size: 15px; color: #2b2e33; margin: 12px 0; }
+      p code, li code, td code {
+        font-family: ui-monospace, "JetBrains Mono", monospace; font-size: 13px;
+        background: #eef0f2; padding: 1px 7px; border-radius: 6px;
+      }
+      ul, ol { margin: 12px 0 12px 22px; font-size: 15px; color: #2b2e33; }
+      li { margin: 7px 0; }
+      li::marker { color: var(--teal); }
+      table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 18px 0 8px; }
+      th, td { padding: 11px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+      th { font-size: 12px; color: var(--muted); font-weight: 500; white-space: nowrap; }
+      pre {
+        background: var(--ink); color: #e8e6e3; border-radius: 12px;
+        padding: 20px 22px; font-size: 13px; line-height: 1.8; overflow-x: auto;
+        font-family: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
+        margin: 16px 0;
+      }
+      .callout {
+        border: 1px solid var(--line); border-left: 4px solid var(--teal);
+        background: var(--card); border-radius: 0 12px 12px 0;
+        padding: 16px 20px; font-size: 14px; color: #2b2e33; margin: 18px 0;
+      }
+      footer {
+        margin-top: 64px; padding-top: 22px; border-top: 1px solid var(--line);
+        color: var(--faint); font-size: 12.5px; display: flex;
+        justify-content: space-between; flex-wrap: wrap; gap: 8px;
+      }
+      footer a { color: var(--muted); }
+      @media (prefers-reduced-motion: reduce) { .rise { opacity: 1; animation: none; } }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="topbar rise d1">
+        <a class="brand" href="/"><i></i>tech-notes</a>
+        <nav>
+          <a href="/#posts">文章</a>
+          <a href="/#projects">开源</a>
+          <a href="https://github.com/xfy6238">GitHub</a>
+        </nav>
+      </div>
+
+      <article>
+        <header class="rise d1">
+          <span class="kicker">开源 · 脱敏实战</span>
+          <h1>从私有 JD 库到脱敏开源：一次可展示的改造</h1>
+          <div class="byline">阅读约 9 分钟 · 七类敏感点 · 20 条样例库设计 · 双模式 10/10</div>
+        </header>
+
+        <div class="verdict rise d2">
+          <span class="t">结论先行</span>
+          <p>脱敏不是删几个文件，而是另建一条<code>可公开的平行线</code>：原工程原地不动，新目录只装逻辑 + 虚构样例；评测脚本原样搬过去，<code>rules / llm 双模式 10/10</code> 即出厂合格证。</p>
+        </div>
+
+        <h2>背景：为什么不能直接公开</h2>
+        <p>一个求职匹配 Agent，天然带着三样不能见光的东西：<b>真实公司名的 JD 库</b>（来源合规风险）、<b>个人画像</b>（默认画像就是简历一句话）、<b>密钥读取逻辑</b>（读本地授权文件）。直接 push 等于同时泄露数据、身份和凭证。</p>
+        <p>但逻辑本身是干净的：检索排序走本地规则，大模型只做生成，Key 缺失自动降级。这意味着——<b>把“数据”和“身份”抽掉，剩下的就是可开源的</b>。改造目标就一句话：让陌生人 git clone 下来，五分钟跑通全链路。</p>
+
+        <h2><span class="n">1</span>七类敏感点：先盘点再动手</h2>
+        <p>动手前全仓扫一遍，敏感点归了七类，对应处置写死：</p>
+        <table>
+          <thead><tr><th>类别</th><th>例子</th><th>处置</th></tr></thead>
+          <tbody>
+            <tr><td>真实 JD 数据</td><td>8 个真实 JSON、前端静态 <code>jobs.json</code> 副本</td><td>不带；只带 20 条虚构样例</td></tr>
+            <tr><td>运行时产物</td><td><code>jobs.db</code>、向量库、日志</td><td>不带；gitignore</td></tr>
+            <tr><td>个人画像</td><td>默认画像、示例快捷画像、测试兜底数据里的真实公司</td><td>换成通用示例画像与虚构公司</td></tr>
+            <tr><td>密钥链路</td><td>读本地授权文件的演示脚本</td><td>重写，只走环境变量</td></tr>
+            <tr><td>爬虫与更新脚本</td><td>含真实姓名校验的抓取自动化</td><td>整文件不带；声明“无爬虫”</td></tr>
+            <tr><td>评测黄金集</td><td>含真实公司名的 20 条 RAG 黄金集</td><td>不带；10 题主评测改吃样例库</td></tr>
+            <tr><td>复盘报告</td><td>含内部路径与真实数据的 HTML 报告</td><td>不带；结论重写成博客文章</td></tr>
+          </tbody>
+        </table>
+
+        <h2><span class="n">2</span>样例库设计：20 条虚构，但要是“真数据”</h2>
+        <p>样例库不是随便编 20 条——它要同时满足三件事：<b>开箱可跑、评测全过、换真数据零改代码</b>。设计要点：</p>
+        <ul>
+          <li><b>公司全虚构</b>：名字一眼假（如“云杉示例科技”），链接全用 <code>example.com</code> 占位，避免与任何真实公司撞名。</li>
+          <li><b>字段与真库同 schema</b>：标题/公司/薪资/薪资中位/技能数组/fit/活跃度等一个不少，前端类型不用改。</li>
+          <li><b>为评测量身定做</b>：默认画像的 Top3 必须全员薪资≥17K、缺口命中 RAG/Prompt/MCP、热点命中——所以 3 个高优岗的技能要刻意铺好 RAG、Prompt、MCP、Docker 这些词；再掺两条 17K 以下的，演示过滤逻辑。</li>
+          <li><b>技能必须是数组</b>：缺口分析对技能做分词匹配，字符串会散成单字，这是从真库字符串格式里吃过的亏，样例里直接写对。</li>
+        </ul>
+        <div class="callout">检验标准：换 <code>JOBS_JSON</code> 指向真库，代码一行不用改——样例库只是真库的“形状替身”。</div>
+
+        <h2><span class="n">3</span>代码适配：最小改动六处</h2>
+        <p>逻辑文件原样搬，只动与“私有”耦合的六处，每处都有明确理由：</p>
+        <ul>
+          <li><code>JOBS_JSON</code> 默认指向样例库（环境变量仍可覆盖）；</li>
+          <li>默认画像换成通用示例画像；</li>
+          <li>面试热点在无详情正文时回退扫标题+技能（详情库是私有数据，不能带）；</li>
+          <li>评测脚本去掉“失败等两分钟重试”（那是双人协作的逻辑，开源版失败即打印快照退出）；</li>
+          <li>一键演示脚本去掉个人密钥文件读取，只透传环境变量；</li>
+          <li>会话库默认文件名改掉，不与任何真实库同名，防误覆盖。</li>
+        </ul>
+
+        <h2><span class="n">4</span>出厂合格证：双模式 10/10</h2>
+        <p>评测脚本跟着样例库一起搬，跑两遍：纯规则模式（无 Key，即开箱状态）和大模型模式。两遍都 <b>10/10</b> 才算完——这意味着陌生人 clone 下来，不配任何密钥也能看到完整演示；配了 Key 则多出生成话术。</p>
+
+        <h2><span class="n">5</span>提交前检查清单</h2>
+        <ul>
+          <li>全仓 grep：真实公司名、招聘站 URL、真名、内部词、个人画像，零命中；</li>
+          <li><code>node_modules / dist / *.db / 向量库 / 日志</code> 不在暂存区（<code>git status</code> 逐项过）；</li>
+          <li>提交身份用 noreply 邮箱，不暴露公司邮箱；</li>
+          <li>推送用一次性 Token，推完即删，remote 存干净地址；</li>
+          <li>远端文件树与本地提交逐项对数（53 个文件，一个不少）。</li>
+        </ul>
+        <p>成品在 <code>jobmatch-agent</code> 仓库。原私有工程原地不动，两条线从此各走各的：一条自用迭代，一条对外展示。</p>
+      </article>
+
+      <footer>
+        <span><a href="/">← 返回首页</a></span>
+        <span>tech-notes · GitHub Pages 托管</span>
+      </footer>
+    </div>
+  </body>
+</html>
