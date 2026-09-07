@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>我做了一个AI算命Agent，去面35K的岗 · 技术笔记</title>
+    <title>我做了一个AI算命Agent · 技术笔记</title>
     <meta
       name="description"
       content="排盘绝不让大模型碰、29万字典籍RAG、免费模型的三个坑：一个玄学Agent的完整开发记录。"
@@ -254,7 +254,7 @@
       <article>
         <header class="rise d1">
           <span class="kicker">AGENT 实战 · 产品体验</span>
-          <h1>我做了一个AI算命Agent，去面35K的岗</h1>
+          <h1>我做了一个AI算命Agent，</h1>
           <div class="byline">
             阅读约 8 分钟 · 规则排盘 · 29万字典籍RAG · 免费模型 · 完整复盘
           </div>
@@ -263,15 +263,14 @@
         <div class="verdict rise d2">
           <span class="t">结论先行</span>
           <p>
-            排盘这种事，大模型越聪明越危险——所以架构从第一天就三权分立：<code
-              >规则算数、RAG递小抄、模型只说话</code
-            >。两周交付，引用率 5/5，20 并发 0.2 秒。
+            排盘这种事，大模型越聪明越危险——所以架构从第一天就三权分立：<code>规则算数、RAG递小抄、模型只说话</code>。两周交付，引用率
+            5/5，20 并发 0.2 秒。
           </p>
         </div>
 
         <h2>起因：一条JD，一次现挂的面试题</h2>
         <p>
-          故事是这样的，上周刷到一条JD，杭州某厂招AI应用全栈，35到65K，干的事是从0到1做玄学产品，八字大运起名择日那种。
+          故事是这样的，上周刷到一条JD，干的事是从0到1做玄学产品，八字大运起名择日那种。
         </p>
         <p>
           我当时就愣住了，这不就是量身定做的面试题吗。我，十年Flutter，正想往Agent开发转，手里缺一个能现场演示的作品。行，那就做一个，顺便看看大模型到底能不能算命。
@@ -321,8 +320,12 @@
         <ul>
           <li>录入出生信息，命盘秒出：四柱十神藏干大运全有；</li>
           <li>生成分析：事业感情财运加一段典籍说，追问走SSE流式逐字输出；</li>
-          <li>档案能搜能删，后台能换模型调温度回滚Prompt，还能生成分享海报；</li>
-          <li>登录注册手搓：SQLite加pbkdf2加手工JWT，零依赖，本地开发没云服务就有什么用什么；</li>
+          <li>
+            档案能搜能删，后台能换模型调温度回滚Prompt，还能生成分享海报；
+          </li>
+          <li>
+            登录注册手搓：SQLite加pbkdf2加手工JWT，零依赖，本地开发没云服务就有什么用什么；
+          </li>
           <li>20并发压测0.2秒全过，无Key跑规则版，演示永不断线。</li>
         </ul>
         <p>
